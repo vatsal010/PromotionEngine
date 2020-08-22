@@ -3,7 +3,7 @@ using System;
 
 namespace PromotionEngine.Model
 {
-    public class BuyXAtY : IProductBasedDiscount
+    public class BuyXAtY : IDiscount
     {
         private readonly int _buyCount = 0;
         private readonly double _discountPrice = 0;
