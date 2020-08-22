@@ -2,6 +2,6 @@
 {
     public interface IProductBasedDiscount : IDiscount
     {
-        double Apply();
+        double Apply(int productCount, double productPrice);
     }
 }
