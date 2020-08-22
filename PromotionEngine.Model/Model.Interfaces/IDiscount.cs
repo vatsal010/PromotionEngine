@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace PromotionEngine.Model.Model.Interfaces
 {
+    /// <summary>
+    /// Interface for Discounts that can be applied
+    /// </summary>
     public interface IDiscount
     {
         Guid Id { get; set; }

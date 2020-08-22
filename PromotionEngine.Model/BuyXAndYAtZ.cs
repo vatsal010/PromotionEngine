@@ -5,6 +5,10 @@ using System.Linq;
 
 namespace PromotionEngine.Model
 {
+    /// <summary>
+    /// Discount - Buy Product A + B at the price of Y
+    /// E.g. Product A = 20INR and Product B = 15, Buy Product A + B at 30
+    /// </summary>
     public class BuyXAndYAtZ : IDiscount
     {
         private readonly double _discountPrice = 0;
@@ -30,17 +34,11 @@ namespace PromotionEngine.Model
             Products = products;
         }
 
-        private void UpdateDiscountStatus(List<CartItem> cart)
-        {
-            var itemX = cart.Where(x => x.Product.Id == Products[0].Id).FirstOrDefault();
-            var itemY = cart.Where(x => x.Product.Id == Products[1].Id).FirstOrDefault();
-
-            if (itemX != null && itemY != null)
-            {
-                itemX.IsPriceCalculated = true;
-            }
-        }
-
+        /// <summary>
+        /// Apply's discount on products if the cart has both Product X and Y
+        /// </summary>
+        /// <param name="cart">The Cart</param>
+        /// <returns>Total discounted price</returns>
         public double Apply(List<CartItem> cart)
         {
             var total = 0.0;
@@ -64,6 +62,22 @@ namespace PromotionEngine.Model
             }
             this.UpdateDiscountStatus(cart);
             return total;
+        }
+
+        /// <summary>
+        /// Mark's one product as Discount calculated,
+        /// so that the total price is not calculated while checkout
+        /// </summary>
+        /// <param name="cart"></param>
+        private void UpdateDiscountStatus(List<CartItem> cart)
+        {
+            var itemX = cart.Where(x => x.Product.Id == Products[0].Id).FirstOrDefault();
+            var itemY = cart.Where(x => x.Product.Id == Products[1].Id).FirstOrDefault();
+
+            if (itemX != null && itemY != null)
+            {
+                itemX.IsPriceCalculated = true;
+            }
         }
     }
 }

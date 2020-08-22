@@ -5,6 +5,10 @@ using System.Linq;
 
 namespace PromotionEngine.Model
 {
+    /// <summary>
+    /// Discount - Buy Product A * X at the price of Y
+    /// E.g. Product A = 50INR, Buy Product A * 3 at 130
+    /// </summary>
     public class BuyXAtY : IDiscount
     {
         private readonly int _buyCount = 0;
@@ -32,6 +36,11 @@ namespace PromotionEngine.Model
             Products = products;
         }
 
+        /// <summary>
+        /// Apply's discount on products if the cart has Product X in multiple of 3
+        /// </summary>
+        /// <param name="cart">The Cart</param>
+        /// <returns>Total discounted price</returns>
         public double Apply(List<CartItem> cart)
         {
             int itemCount = cart.Where(x => x.Product.Id == Products.FirstOrDefault().Id).Select(x => x.Count).FirstOrDefault();
