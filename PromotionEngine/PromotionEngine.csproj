@@ -50,6 +50,12 @@
     <None Include=".gitignore" />
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PromotionEngine.Model\PromotionEngine.Model.csproj">
+      <Project>{ec7d1bdf-0571-4d76-bfc4-896085c5708f}</Project>
+      <Name>PromotionEngine.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

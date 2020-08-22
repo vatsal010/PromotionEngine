@@ -34,7 +34,7 @@ namespace PromotionEngine.Model
 
         public double Apply(List<CartItem> cart)
         {
-            int itemCount = cart.Where(x => x.Id == Products.FirstOrDefault().Id).Count();
+            int itemCount = cart.Where(x => x.Product.Id == Products.FirstOrDefault().Id).Select(x => x.Count).FirstOrDefault();
 
             var itemPacks = itemCount / this._buyCount;
             var itemPacksRemainder = itemCount % this._buyCount;

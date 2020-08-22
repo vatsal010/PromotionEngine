@@ -57,7 +57,7 @@ namespace PromotionEngine.Model
 
         public double Checkout()
         {
-            _totalPrice = _cart.Sum(x => x.TotalPrice);
+            _totalPrice = _cart.Where(x => x.IsPriceCalculated == false).Sum(x => x.TotalPrice);
             return _totalPrice;
         }
 

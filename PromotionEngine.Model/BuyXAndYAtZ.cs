@@ -30,42 +30,39 @@ namespace PromotionEngine.Model
             Products = products;
         }
 
+        private void UpdateDiscountStatus(List<CartItem> cart)
+        {
+            var itemX = cart.Where(x => x.Product.Id == Products[0].Id).FirstOrDefault();
+            var itemY = cart.Where(x => x.Product.Id == Products[1].Id).FirstOrDefault();
+
+            if (itemX != null && itemY != null)
+            {
+                itemX.IsPriceCalculated = true;
+            }
+        }
+
         public double Apply(List<CartItem> cart)
         {
             var total = 0.0;
             var ProductX = Products[0];
             var ProductY = Products[1];
 
-            var itemXCount = cart.Where(x => x.Id == ProductX.Id).Count();
-            var itemYCount = cart.Where(x => x.Id == ProductY.Id).Count();
+            var itemXCount = cart.Where(x => x.Product.Id == ProductX.Id).Select(x => x.Count).FirstOrDefault();
+            var itemYCount = cart.Where(x => x.Product.Id == ProductY.Id).Select(x => x.Count).FirstOrDefault();
 
-            var itemXPack = itemXCount / 2;
-            var itemXRemainder = itemXCount % 2;
-            var itemYPack = itemYCount / 2;
-            var itemYRemainder = itemYCount % 2;
-
-            if (itemXPack > itemYPack)
+            if (itemXCount > itemYCount)
             {
-                total = (itemYPack * this._discountPrice) + ((itemXPack - itemYPack) * ProductX.Price);
+                total = (itemYCount * this._discountPrice) + ((itemXCount - itemYCount) * ProductX.Price);
             }
-            else if (itemXPack < itemYPack)
+            else if (itemXCount < itemYCount)
             {
-                total = (itemXPack * this._discountPrice) + ((itemYPack - itemXPack) * ProductY.Price);
+                total = (itemXCount * this._discountPrice) + ((itemYCount - itemXCount) * ProductY.Price);
             }
             else
             {
-                total = (itemXPack * this._discountPrice);
+                total = (itemXCount * this._discountPrice);
             }
-
-            if (itemXRemainder > 0)
-            {
-                total = total + ProductX.Price;
-            }
-            if (itemYRemainder > 0)
-            {
-                total = total + ProductY.Price;
-            }
-
+            this.UpdateDiscountStatus(cart);
             return total;
         }
     }

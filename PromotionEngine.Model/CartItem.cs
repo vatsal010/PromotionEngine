@@ -17,5 +17,7 @@ namespace PromotionEngine.Model
         public int Count { get; set; }
 
         public double TotalPrice { get; set; }
+
+        public bool IsPriceCalculated { get; set; }
     }
 }
