@@ -8,8 +8,6 @@ namespace PromotionEngine.Model
     public class BuyXAndYAtZ : IDiscount
     {
         private readonly double _discountPrice = 0;
-        private IProduct _productX;
-        private IProduct _productY;
 
         public Guid Id { get; set; }
 
@@ -23,19 +21,23 @@ namespace PromotionEngine.Model
 
         public string Description { get; set; }
 
-        public BuyXAndYAtZ(double discountPrice, IProduct productX, IProduct productY)
+        public List<IProduct> Products { get; set; }
+
+        public BuyXAndYAtZ(double discountPrice, List<IProduct> products)
         {
             Id = Guid.NewGuid();
             _discountPrice = discountPrice;
-            _productX = productX;
-            _productY = productY;
+            Products = products;
         }
 
         public double Apply(List<CartItem> cart)
         {
             var total = 0.0;
-            var itemXCount = cart.Where(x => x.Id == _productX.Id).Count();
-            var itemYCount = cart.Where(x => x.Id == _productY.Id).Count();
+            var ProductX = Products[0];
+            var ProductY = Products[1];
+
+            var itemXCount = cart.Where(x => x.Id == ProductX.Id).Count();
+            var itemYCount = cart.Where(x => x.Id == ProductY.Id).Count();
 
             var itemXPack = itemXCount / 2;
             var itemXRemainder = itemXCount % 2;
@@ -44,11 +46,11 @@ namespace PromotionEngine.Model
 
             if (itemXPack > itemYPack)
             {
-                total = (itemYPack * this._discountPrice) + ((itemXPack - itemYPack) * _productX.Price);
+                total = (itemYPack * this._discountPrice) + ((itemXPack - itemYPack) * ProductX.Price);
             }
             else if (itemXPack < itemYPack)
             {
-                total = (itemXPack * this._discountPrice) + ((itemYPack - itemXPack) * _productY.Price);
+                total = (itemXPack * this._discountPrice) + ((itemYPack - itemXPack) * ProductY.Price);
             }
             else
             {
@@ -57,11 +59,11 @@ namespace PromotionEngine.Model
 
             if (itemXRemainder > 0)
             {
-                total = total + _productX.Price;
+                total = total + ProductX.Price;
             }
             if (itemYRemainder > 0)
             {
-                total = total + _productY.Price;
+                total = total + ProductY.Price;
             }
 
             return total;

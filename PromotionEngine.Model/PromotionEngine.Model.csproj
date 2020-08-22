@@ -41,10 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuyXAndYAtZ.cs" />
+    <Compile Include="Cart.cs" />
     <Compile Include="CartItem.cs" />
+    <Compile Include="InMemoryDiscountDB\DiscountDb.cs" />
+    <Compile Include="InMemoryDiscountDB\IDiscountDb.cs" />
+    <Compile Include="Model.Interfaces\ICart.cs" />
     <Compile Include="Model.Interfaces\IDiscount.cs" />
     <Compile Include="Model.Interfaces\IProduct.cs" />
-    <Compile Include="Model.Interfaces\Product.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="BuyXAtY.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

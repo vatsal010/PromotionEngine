@@ -9,7 +9,6 @@ namespace PromotionEngine.Model
     {
         private readonly int _buyCount = 0;
         private readonly double _discountPrice = 0;
-        private IProduct _product;
 
         public Guid Id { get; set; }
 
@@ -23,17 +22,19 @@ namespace PromotionEngine.Model
 
         public string Description { get; set; }
 
-        public BuyXAtY(int buyCount, double discountPrice, IProduct product)
+        public List<IProduct> Products { get; set; }
+
+        public BuyXAtY(int buyCount, double discountPrice, List<IProduct> products)
         {
             Id = Guid.NewGuid();
             _discountPrice = discountPrice;
             _buyCount = buyCount;
-            _product = product;
+            Products = products;
         }
 
         public double Apply(List<CartItem> cart)
         {
-            int itemCount = cart.Where(x => x.Id == _product.Id).Count();
+            int itemCount = cart.Where(x => x.Id == Products.FirstOrDefault().Id).Count();
 
             var itemPacks = itemCount / this._buyCount;
             var itemPacksRemainder = itemCount % this._buyCount;
@@ -41,11 +42,11 @@ namespace PromotionEngine.Model
 
             if (itemPacks > 0)
             {
-                total = (itemPacks * this._discountPrice) + (itemPacksRemainder * _product.Price);
+                total = (itemPacks * this._discountPrice) + (itemPacksRemainder * Products.FirstOrDefault().Price);
             }
             else
             {
-                total = itemCount * _product.Price;
+                total = itemCount * Products.FirstOrDefault().Price;
             }
             return total;
         }
