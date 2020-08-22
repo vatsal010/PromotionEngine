@@ -47,6 +47,8 @@ namespace PromotionEngine.Model
 
             var itemXCount = cart.Where(x => x.Product.Id == ProductX.Id).Select(x => x.Count).FirstOrDefault();
             var itemYCount = cart.Where(x => x.Product.Id == ProductY.Id).Select(x => x.Count).FirstOrDefault();
+            var itemX = cart.Where(x => x.Product.Id == ProductX.Id).FirstOrDefault();
+            var itemY = cart.Where(x => x.Product.Id == ProductY.Id).FirstOrDefault();
 
             if (itemXCount > itemYCount)
             {
@@ -60,7 +62,7 @@ namespace PromotionEngine.Model
             {
                 total = (itemXCount * this._discountPrice);
             }
-            this.UpdateDiscountStatus(cart);
+            this.UpdateDiscountStatus(cart, itemXCount, itemYCount, itemX, itemY);
             return total;
         }
 
@@ -69,14 +71,21 @@ namespace PromotionEngine.Model
         /// so that the total price is not calculated while checkout
         /// </summary>
         /// <param name="cart"></param>
-        private void UpdateDiscountStatus(List<CartItem> cart)
+        private void UpdateDiscountStatus(List<CartItem> cart, int itemXCount, int itemYCount, CartItem itemX, CartItem itemY)
         {
-            var itemX = cart.Where(x => x.Product.Id == Products[0].Id).FirstOrDefault();
-            var itemY = cart.Where(x => x.Product.Id == Products[1].Id).FirstOrDefault();
-
-            if (itemX != null && itemY != null)
+            if (itemXCount > itemYCount)
             {
-                itemX.IsPriceCalculated = true;
+                if(itemY != null) itemY.IsPriceCalculated = true;
+                if(itemX != null) itemX.IsPriceCalculated = false;
+            }
+            else if (itemXCount < itemYCount)
+            {
+                if(itemY != null) itemY.IsPriceCalculated = false;
+                if(itemX != null) itemX.IsPriceCalculated = true;
+            }
+            else
+            {
+                if(itemX != null) itemX.IsPriceCalculated = true;
             }
         }
     }

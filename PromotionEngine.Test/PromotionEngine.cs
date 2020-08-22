@@ -117,6 +117,50 @@ namespace PromotionEngine.Test
             Assert.IsTrue(280 == result);
         }
 
+        [TestCategory("Smoke"), TestMethod]
+        public void AddItems_DiscountOnProductCD_ExtraProductC()
+        {
+            // Arragge
+            var cart = new Cart(discountDb);
+            cart.Add(products[2]);
+            cart.Add(products[3]); //30
+            cart.Add(products[2]);
+            cart.Add(products[3]); //30
+            cart.Add(products[2]);
+            cart.Add(products[3]); //30
+
+            cart.Add(products[2]); //20
+            cart.Add(products[2]); //20
+
+            // Act
+            var result = cart.Checkout();
+
+            // Assert
+            Assert.IsTrue(130 == result);
+        }
+
+        [TestCategory("Smoke"), TestMethod]
+        public void AddItems_DiscountOnProductCD_ExtraProductD()
+        {
+            // Arragge
+            var cart = new Cart(discountDb);
+            cart.Add(products[2]);
+            cart.Add(products[3]); //30
+            cart.Add(products[2]);
+            cart.Add(products[3]); //30
+            cart.Add(products[2]);
+            cart.Add(products[3]); //30
+
+            cart.Add(products[3]); //15
+            cart.Add(products[3]); //15
+
+            // Act
+            var result = cart.Checkout();
+
+            // Assert
+            Assert.IsTrue(120 == result);
+        }
+
         private static List<IProduct> CreateProducts()
         {
             List<IProduct> products = new List<IProduct>();
