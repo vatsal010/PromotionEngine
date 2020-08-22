@@ -4,7 +4,7 @@
     {
         double Add(IProduct product);
 
-        double Remove(IProduct product, int count);
+        bool Remove(IProduct product, int count);
 
         double Checkout();
     }

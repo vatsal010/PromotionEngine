@@ -1,7 +1,11 @@
-﻿using System;
+﻿using PromotionEngine.Model.Model.Interfaces;
+using System;
 
-namespace PromotionEngine.Model.Model.Interfaces
+namespace PromotionEngine.Model
 {
+    /// <summary>
+    /// The product that can be added in Cart
+    /// </summary>
     public class Product : IProduct
     {
         public Product()

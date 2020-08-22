@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace PromotionEngine.Model
 {
+    /// <summary>
+    /// Shopping cart
+    /// </summary>
     public class Cart : ICart
     {
         private readonly List<CartItem> _cart = null;
@@ -18,6 +21,11 @@ namespace PromotionEngine.Model
             _discountDb = discountDb;
         }
 
+        /// <summary>
+        /// Add product in cart
+        /// </summary>
+        /// <param name="product">Product to be added in cart</param>
+        /// <returns>Total cost of the Product(s)</returns>
         public double Add(IProduct product)
         {
             var productCartItem = _cart.FirstOrDefault(x => x.Product.Id == product.Id);
@@ -50,20 +58,37 @@ namespace PromotionEngine.Model
             }
 
             productCartItem.TotalPrice = productTotalPrice;
-            _totalPrice = _cart.Sum(x => x.TotalPrice);
 
-            return _totalPrice;
+            return productTotalPrice;
         }
 
+        /// <summary>
+        /// Checkout products from the cart
+        /// </summary>
+        /// <returns>Total cost of all the products</returns>
         public double Checkout()
         {
             _totalPrice = _cart.Where(x => x.IsPriceCalculated == false).Sum(x => x.TotalPrice);
             return _totalPrice;
         }
 
-        public double Remove(IProduct product, int count)
+        /// <summary>
+        /// Remove item from cart
+        /// </summary>
+        /// <param name="product">Product to be removed</param>
+        /// <param name="count">Count of the product to be removed</param>
+        /// <returns></returns>
+        public bool Remove(IProduct product, int count)
         {
-            throw new NotImplementedException();
+            var result = false;
+            var productCartItem = _cart.FirstOrDefault(x => x.Product.Id == product.Id);
+
+            if (productCartItem != null && productCartItem.Count >= count)
+            {
+                productCartItem.Count = productCartItem.Count - count;
+                result = true;
+            }
+            return result;
         }
     }
 }

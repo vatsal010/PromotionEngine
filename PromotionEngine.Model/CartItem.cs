@@ -3,6 +3,9 @@ using System;
 
 namespace PromotionEngine.Model
 {
+    /// <summary>
+    /// Item in the cart
+    /// </summary>
     public class CartItem
     {
         public CartItem()
