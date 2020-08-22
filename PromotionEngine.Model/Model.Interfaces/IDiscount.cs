@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PromotionEngine.Model.Model.Interfaces
 {
@@ -10,5 +11,7 @@ namespace PromotionEngine.Model.Model.Interfaces
         DateTime EndTime { get; set; }
         string Title { get; set; }
         string Description { get; set; }
+
+        double Apply(List<CartItem> cart);
     }
 }

@@ -1,11 +1,15 @@
 ﻿using PromotionEngine.Model.Model.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PromotionEngine.Model
 {
     public class BuyXAndYAtZ : IDiscount
     {
         private readonly double _discountPrice = 0;
+        private IProduct _productX;
+        private IProduct _productY;
 
         public Guid Id { get; set; }
 
@@ -19,36 +23,45 @@ namespace PromotionEngine.Model
 
         public string Description { get; set; }
 
-        public BuyXAndYAtZ(double discountPrice)
+        public BuyXAndYAtZ(double discountPrice, IProduct productX, IProduct productY)
         {
             Id = Guid.NewGuid();
             _discountPrice = discountPrice;
+            _productX = productX;
+            _productY = productY;
         }
 
-        public double Apply(int itemACount, double productAPrice, int itemBCount, double productBPrice)
+        public double Apply(List<CartItem> cart)
         {
             var total = 0.0;
-            var itemAPack = itemACount / 2;
-            var itemARemainder = itemACount % 2;
-            var itemBPack = itemBCount / 2;
-            var itemBRemainder = itemBCount % 2;
+            var itemXCount = cart.Where(x => x.Id == _productX.Id).Count();
+            var itemYCount = cart.Where(x => x.Id == _productY.Id).Count();
 
-            if (itemAPack > itemBPack)
+            var itemXPack = itemXCount / 2;
+            var itemXRemainder = itemXCount % 2;
+            var itemYPack = itemYCount / 2;
+            var itemYRemainder = itemYCount % 2;
+
+            if (itemXPack > itemYPack)
             {
-                total = (itemBPack * this._discountPrice) + ((itemAPack - itemBPack) * productAPrice);
+                total = (itemYPack * this._discountPrice) + ((itemXPack - itemYPack) * _productX.Price);
+            }
+            else if (itemXPack < itemYPack)
+            {
+                total = (itemXPack * this._discountPrice) + ((itemYPack - itemXPack) * _productY.Price);
             }
             else
             {
-                total = (itemAPack * this._discountPrice) + ((itemBPack - itemAPack) * productAPrice);
+                total = (itemXPack * this._discountPrice);
             }
 
-            if (itemARemainder > 0)
+            if (itemXRemainder > 0)
             {
-                total = total + productAPrice;
+                total = total + _productX.Price;
             }
-            if (itemBRemainder > 0)
+            if (itemYRemainder > 0)
             {
-                total = total + productBPrice;
+                total = total + _productY.Price;
             }
 
             return total;

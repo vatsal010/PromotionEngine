@@ -1,5 +1,7 @@
 ﻿using PromotionEngine.Model.Model.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PromotionEngine.Model
 {
@@ -7,6 +9,7 @@ namespace PromotionEngine.Model
     {
         private readonly int _buyCount = 0;
         private readonly double _discountPrice = 0;
+        private IProduct _product;
 
         public Guid Id { get; set; }
 
@@ -20,26 +23,29 @@ namespace PromotionEngine.Model
 
         public string Description { get; set; }
 
-        public BuyXAtY(int buyCount, double discountPrice)
+        public BuyXAtY(int buyCount, double discountPrice, IProduct product)
         {
             Id = Guid.NewGuid();
             _discountPrice = discountPrice;
             _buyCount = buyCount;
+            _product = product;
         }
 
-        public double Apply(int itemCount, double productPrice)
+        public double Apply(List<CartItem> cart)
         {
+            int itemCount = cart.Where(x => x.Id == _product.Id).Count();
+
             var itemPacks = itemCount / this._buyCount;
             var itemPacksRemainder = itemCount % this._buyCount;
             var total = 0.0;
 
             if (itemPacks > 0)
             {
-                total = (itemPacks * this._discountPrice) + (itemPacksRemainder * productPrice);
+                total = (itemPacks * this._discountPrice) + (itemPacksRemainder * _product.Price);
             }
             else
             {
-                total = itemCount * productPrice;
+                total = itemCount * _product.Price;
             }
             return total;
         }
