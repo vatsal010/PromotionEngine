@@ -1,0 +1,21 @@
+﻿using PromotionEngine.Model.Model.Interfaces;
+using System;
+
+namespace PromotionEngine.Model
+{
+    public class CartItem
+    {
+        public CartItem()
+        {
+            Id = Guid.NewGuid();
+        }
+
+        public Guid Id { get; private set; }
+
+        public IProduct Product { get; set; }
+
+        public int Count { get; set; }
+
+        public double TotalPrice { get; set; }
+    }
+}
